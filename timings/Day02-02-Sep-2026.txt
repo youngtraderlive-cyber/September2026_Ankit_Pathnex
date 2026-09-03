@@ -1,0 +1,16 @@
+Today Learn basic of linux and understanding the commands like
+ls for list
+pwd - present working directory
+top for - status ram
+cd - change directory
+touch - create file
+vim - edit folder
+mkdir - make the directories
+ls -ls - list and hiden file
+head - in contect top some lines
+tail- in contect bottom some lines
+cp - copy
+rm - delete the folder 
+mv - remove/edit file name
+cat - view the content in folder
+chmod - change the permissions
