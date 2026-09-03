@@ -1,0 +1,6 @@
+Today I am learn Linux another command
+chmod - change fir permission
+chown - change file ownership
+chgrp - change group ownership
+umark - default the permission file no 022
+ 
