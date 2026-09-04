@@ -1,0 +1,126 @@
+Jenkinsfile - Basix CI Pipeline
+Pipeline {
+  agent any
+  stages { 
+    stage('Build') {
+      step {
+        echo 'Building project'
+       }
+    }
+    stage('test') {
+       steps { 
+         echo 'Running tests'
+      }
+   }
+   stage('Deploy') {
+     step {
+         echo 'Deployment application'
+               }
+          }
+     }
+}
+  
+Git CI/CD - Basic Pipeline
+stages:
+   - build
+   - test
+   - deploy
+
+build: 
+  stage: build
+  script: 
+    - echo "Running test"
+  
+deploy:
+   stage: deploy
+   script:
+     - echo "Deploying application"
+
+Ansible - Install  and Configure Nginx
+- name: Install and confirure Ngix
+  host: all
+  become: yes
+  task:
+   - name: Install nginx
+     yum:
+      name: nginx
+      state: present
+   - name: Configure nginx
+     template
+       src: nginx.conf.j2
+       dest: /ect/nginx/nginx.conf
+   - name: Start nginx service
+     service:
+       name: nginx
+       state: started
+        enabled: yes
+Terraform - EC2 with Security group 
+resouse "aws_security_group" "example" {
+ name        = "example_securoty_group"
+ description = "Allow SSH and HTTP"
+ ingress {
+   from_port    = 22
+   to_port      = 22 
+   protocal     = "tcp"
+   cider_blacks = ["0.0.0.0/0"]
+}
+
+ingress {
+  from_port  = 80
+  to_port    = 80
+  protocol   = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+}
+
+ingress {
+  from_port  = 0
+  to_port    = 0
+  protocol   = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+ }
+}
+
+
+Docker
+# Apache Container
+FROM ubuntu:22.04
+RUN apt update && apt install apache2 -y
+RUN echo "Hello Pathnex" > /var/www/html/index.html
+CMD ["apachectl", "-D", "FOREGROUND"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
