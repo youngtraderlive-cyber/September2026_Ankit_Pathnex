@@ -1,0 +1,2 @@
+Today revised AWS concepts lke EC2, IAM , VPC, simple storage service, Rount 53
+Learn english speaking
