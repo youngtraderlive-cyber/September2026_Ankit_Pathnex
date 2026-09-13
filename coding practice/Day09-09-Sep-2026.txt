@@ -1,0 +1,127 @@
+Ansible
+
+- name: Setup Docker Container for Nginx
+  hosts: all
+  become: yes
+   tasks:
+     - name: Pull Nginx image
+       docker_image:
+           name: nginx
+           sorceL pull 
+     - name: Run Nginx continer
+       docker_container:
+         name: nginx-container
+         image: nginx
+         state: started
+      published_ports:
+         - "8080:80"
+
+Terraform - EC2
+resource "aws_launch_configuraion" "example" {
+   name = "example-config"
+   image_id = "ami........"
+   instance_type = "t3.medium"
+}
+ 
+resource "aws_autoscaling_group" "example" {
+   desired_capacity  = 2
+   max_size          = 3
+   min_size          = 1
+   vpx_zone_identifier = ["subnet-12345678"]
+   launch_configuration = aws_launch_confirguration.example.id
+}
+
+Kubernetes 
+apiVersion: apps/v1
+kind Deployment
+metdata:
+  name: pathnex-deployment
+spec:
+   replicas: 1
+   selector:
+     app: pathnex-app
+templete:
+  metadeta:
+    labels:
+      app: pathnex-aap
+spec: 
+  containers:
+     - name : nginx
+       image: nginx
+       ports:
+         - containerport: 80
+
+---
+
+
+apiVersion: autoscaling/v2
+kind HorisontalpodAutoscaler
+metadata:
+   name: pathnex-hpa
+spc:
+   scaletargetRef:
+    apiVersion: app/V1
+    kind: Deployment
+    name: pathnex-deployment
+minResplicas: 1
+mazReplicas: 10
+tergetCPUUtilizationpercentage: 50
+
+Jenkins File
+Pipeline { 
+  agent any
+  stage {
+     stage('Deploy to Kubernetes') {
+       steps {
+          script {
+              sh 'kubectl apply -f deployment.yaml'
+                 }
+              }
+          }
+       }
+    }
+
+Gitlab CI/CD - deploy to kubernetes
+stages:
+  - deploy
+  
+ deploy:
+    stage: deploy
+    script:
+        - kubectl apply -f kubernetes/deployment.yaml
+
+FROM ubuntu:22.04
+ENV INSTITUTE=Pathnex
+ENV COURSE=DevOps
+CMD echo "$INSTITUTE - $COURSE"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

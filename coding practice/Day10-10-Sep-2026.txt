@@ -1,0 +1,210 @@
+```yaml
+ - name: Setup Docker Container for Multiple Apps
+   hosts: all
+   become: yes
+   tasks: 
+      - name: Pull Web App Image
+        docker_image
+          name: my-web-app
+          source: pull
+
+      - name Pull Database App Image
+        docker_image:
+          name: my-database-app
+          source: pull
+
+      - name Run Web App container
+        docker_container:
+           name: web-app
+           image: my-web-app
+           state: started
+           published_ports:
+             - "8080:80"
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+}
+
+resource "aws_subnet" "public" {
+   vpc_id                 = aws_vpc.main.id
+   cidr_block             = "10.0.1.0/24"
+   availability_zone      = "us-east-1a"
+   map_public_ip_on_launch = true
+}
+
+resourse "aws_subnet" "private" {
+   vpc_id               = aws_vpc.main.id
+   cidr_block           = "10.0.2.0/24"
+   availablility_zone   = "us-east-1b"
+}
+
+apiVersion: apps/v1
+kind: statefulset
+metadata:
+   name: pathnex-db
+spec:
+    serviceName: "pathnex-db"
+    replicas: 3
+    selector:
+       mathlabels:
+          app: pathnex-db
+     template:
+        metadata:
+          labels:
+            app: pathnex-db
+     spec: 
+       container:
+         - name: db
+           image: mysql:5.7
+           volumeMount:
+              - mountpath: /ver/lib/mysql
+                name: mysql-storage
+ volumeClaimTemplates:
+      - metadata:
+          name: mysql-storage
+    spec:
+       accessmode: ["Readwriteonce"]
+       resource:
+         reqests:
+             storage: 1gi
+
+pipeline {
+  agent any 
+  environmet {
+      Image_name = 'pathnex-web-app'
+}
+storage {
+    stage('Build Docker Image') {
+        steps {
+           script {
+               docker.build('${env.IMAGE_NAME}")
+          }
+      }
+   }
+  stage('Push Docker Image') {
+      steps {
+        scrit {
+           docker.withRegistry('https://docker.io') {
+                docker.image ('${env.Image_Name}").push ('lates') 
+            }
+         }
+       }
+     }
+    
+    stage('Deploy to kubernetes") {
+      steps {
+        script {
+           sh 'kubctl apply -f deployment.yaml'
+               }
+             }
+           }
+         }
+       }
+
+Gitlab CI/CD - build, push amd deploy
+stage:
+    - build
+    - push
+    - deploy
+
+build:
+  stage: build
+  script:
+   - docker build -t pathnex-web-app.
+ 
+push:
+ stage: push
+ script:
+   - docker login -u "$CI_registry_user" -p "$CI_REGISTRY_PASSWPRD"
+   - docker push pathnec-we-app
+
+
+deployu:
+  stage: deploy
+  script:
+    - kubctl apply -f kubernetes/deployment.yaml
+
+
+FROM ubuntu:22.04
+WORKDIR /opt/pathnex/devops-project
+COPY . /opt/pathnex/devops-project/
+CMD ["ls", "-l", "/opt/pathnex/devops-project"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

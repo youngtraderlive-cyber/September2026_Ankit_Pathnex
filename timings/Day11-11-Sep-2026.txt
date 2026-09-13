@@ -1,0 +1,5 @@
+Today I am learn Ansible with helm server
+create terraform 
+kubernetes - helm chart for nginx
+Gitlab CI/CD, build, Push , deploy with helm
+
