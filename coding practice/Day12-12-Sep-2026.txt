@@ -1,0 +1,135 @@
+- name: Setup Auto Scaling Group
+  hosts: all
+  become: yes
+  tasks:
+    - name: Create Launch Configuration
+      ec2_asg:
+        name: pathnex-asg
+        region: us-east-1
+        launch_config_name: pathnex-launch-config
+        min_size: 1
+        max_size: 3
+        desired_capacity: 2
+        vpc_zone_identifier: subnet-12345678
+
+resource "aws_lb" "pathnex_lb" {
+  name               = "pathnex-lb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups   = [aws_security_group.allow_ssh_http.id]
+  subnets           = [aws_subnet.public.id]
+}
+
+resource "aws_instance" "pathnex_ec2" {
+  ami           = "ami-0abcd1234abcd1234"
+  instance_type = "t2.micro"
+  security_groups = [aws_security_group.allow_ssh_http.name]
+  tags = {
+    Name = "Pathnex-EC2"
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: pathnex-web-app
+      spec:
+       relicas: 2
+    selector:
+      matchLables:
+         app: pathnex-web-app
+  container:
+     - name: web
+       image: nginx
+   port:
+     -containerport: 80
+---
+    
+ apiVersion: autoscaling/v2
+ kind: Horizontalpotautoscaler
+ metadata: pathnex-web-app-hpa
+ pathnex-web-app-hpa
+  scaletargetRef:
+    apiversion: apps/v1
+    kind: deployment
+    mame: pathnex-web-app
+minreplicas: 1
+maxreplicas: 5
+targetCPUutilizationpercentage: 80
+
+pipeline {
+ agent any
+   stages {
+ stages('build & test') {
+ parallel {
+ 
+ stage('build') {
+   steps {
+       echo 'building project...'
+  }
+}
+
+ stage('test') {
+     stpes {
+      echo 'running tests...'
+   }
+}
+stage('Deploy') {
+   steps {
+      echo 'deploying project....'
+   }
+}
+
+
+stage: 
+  - build
+  - test
+  - deploy
+build:
+  stage: build
+  script:
+    - docker build -t pathnex-web-app.
+
+test:
+   stage: test
+   script:
+     - docker rum pathnec-web-app-npm test
+
+eploy:
+  stage: deploy
+  script:
+    - kubectl apply -f kubernetes/deployment.yaml
+
+
+FROM ubuntu
+VOLUME ["/opt/pathnex/data"]
+CMD ["sleep", "1000"]
+
+/opt/pathnex/data
+
+
+docker volume create pathnex-volume
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
