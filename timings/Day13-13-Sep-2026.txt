@@ -1,0 +1,13 @@
+Today I am learn Kubernetes master node and worker load 
+master node 
+kunet api server comminucate and command
+cloud-controller-manager catch the pods for CRI
+ectd  store data persistant
+scheduler deploy
+contoller-manager requirement pos
+node 1 worker 
+kubnet communicatiob
+kubproxy networking
+pods  application
+CRI container run time
+
