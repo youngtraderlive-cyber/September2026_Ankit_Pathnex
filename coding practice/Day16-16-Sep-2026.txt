@@ -1,0 +1,220 @@
+- name: Create ec2 instance
+  hosts: localhost
+  become: yes
+    tasks:
+      - name: Launch EC2 instance in us-east-1
+        ec2_instance:
+          name: Ankit-ec2-user-1
+          keyname: Ankitaws.ppt
+          region: ap-sount-1
+          instance_type: t2.micro
+          image: ami-0021515051515
+          wait: yes
+      - name: Launch instance in us-west-1
+        ec2_instance:
+        key_name: Ankitaws.ppt
+        region: us-west-1
+        instance_type: t2.micro
+        image: ami-06115151554464
+        wait yes:
+
+terraform 
+resource "aws_vcp" "us-east-vpc" {
+    cidr_block = "10.0.0.0/16"
+    region     = "us-eest-1"
+  }
+ 
+resource "aws_vpc" "us-west_vpc" {
+     cidr_block = "10.1.0.0/16
+      region = "us-west-vpc" 
+  }
+  
+resource "aws_instace" "Ankit-ec2-us-east" {
+   ami              =  "ami-065155151dfd"
+   instance_type    = "t2.micro"
+   resion           = "us-east-1"
+}
+
+resourse "aws_instance" "pathnex_ec2_us_west" {
+   ami             = "ami-01515vc5v4vc2"
+   instance_type   = "t3.micro"
+   region          = "us-east-1"
+}
+
+apiVersion: app/1
+   metadata:
+       name: Ankit-deployment
+       lables:
+          app: Ankit-app
+   spec:
+      replicas: 2
+      selector:
+         matchlabels:
+          app: Ankit-app
+   template:
+      metadata:
+       labels:
+        app: Ankit-app
+  spec:
+    container:
+       - name: nginx
+         image: nginx    
+        port:
+         - containerPort: 80
+  
+---
+
+api-Version: v1
+kind: service
+metadata:
+   name: ankit-service
+spec:
+  selector:
+      app:ankit-app  
+ ports:
+      - protocol: TPC
+        port:  80
+
+pipeline {
+    agent any
+       stage {
+         stage('Build') {
+           steps {
+              echo 'Building docker image...'
+              dcoker.build('Ankit-web-app')
+         }
+    }
+
+   stage('test') {
+       steps {
+         echo 'Runing tests......'
+       }
+   }
+  
+     stage('deploy') {
+       stage {
+         script {
+           if (env.CLUSTER == 'us-east') {
+               sh 'kubectl --context-us-east- apply - f kubernetes/deployment.yaml
+              } else { 
+               sh 'kubectl --context=us-west apply -f kubernetes/deployment.yaml
+             }
+         }
+      }
+   } 
+ }
+}
+
+
+Gitlab CI/CD
+   stage:
+      - build
+      - push
+      - deploy
+    build:
+      stage: build
+      script:
+        - docker build -t ankit-web-app
+    push:
+      stage: push
+      script:
+        - docker login -u  "$CE_REGISTRY_USER" -P "$CI_REGISTRY_PASSWORD"
+        - docker push ankit-web-app
+    deploy:
+       stage: deploy
+       scipt:
+        - | 
+          if [ "$CI_COMMIT_REF_NAME" == "main" ] then
+             kubectl --context=us-east apply -f kubernetes/prod
+
+            else
+            kuberctl --context=us-west-apply - kubernetes/dev-deployment.yaml
+        fi
+   
+    shell scrip Execution
+   #! /bin/bash
+    echo "hello ankit"
+      
+    docker file
+     from ubuntu
+    WORDIR /opt/pathnex.scripts
+    COPY start.sh /opt/pathnex/scripts/
+    RUN chomd +X /opt/ankit/script/start.sh
+    CMD ["/opt/ankit/script/star.sh"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
