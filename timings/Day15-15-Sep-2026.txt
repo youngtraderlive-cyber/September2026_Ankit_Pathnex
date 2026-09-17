@@ -1,0 +1,2 @@
+Today write the code in ansible and GITLAB ci/cd pupeline
+write the scripting

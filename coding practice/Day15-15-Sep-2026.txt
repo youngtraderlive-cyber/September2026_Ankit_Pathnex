@@ -1,0 +1,151 @@
+- name: deploy web application to multiple hosts
+  hosts: all
+  become: yes
+    tasks: 
+      - name: copy web app files
+        copy: 
+         src: /path/to/web/app/
+         dest: /var/www/html/
+      - name: start web app service
+         service: 
+          name: apache2
+          state: started
+          enabled: yes
+resource "aws_lb" "Ankitaws_lb" {
+     name = "Ankitaws_lb"
+     internal = false
+load_balancer_type = "application"
+security_group = [aws_security_group.allo_ssh_http.id]
+subnet =[aws_subnet.public.id]
+ }
+resurce "aws_instance" "pathnex_ec2" {
+ami     = "ami-0121105144116551"
+instance_type = "t3_micro"
+security_group = [aws_security_group.allow_ssh_http.name]
+tags     = {
+  Name = "pathnex-ec2"
+}
+
+helm install pathnex-redis bitnami/redis --set persistence.enabled=true --set persistence.size=8Gi
+
+
+Pipeline {
+   agent any 
+      environment {
+         IMAGE_NAME = 'Ankit-web-app'
+         DEPLOY-ENV = 'production'
+      IMAGE_NAME = 'Ankit-web-app'
+ docker.build("${env.image_name})
+DEPLOY_ENV = 'production' 
+}
+  stage {
+    stage('Build') {
+       steps {
+         echo 'Building Docker image...'
+         docker.build("${env.INAGE_NAME})
+    }
+ }
+  stage('Test') {
+     steps {
+      echo 'Running tests...'
+     }
+}
+  stage('Deploy to Kubernetes') {
+      steps { 
+        script {
+           if (env.deploy-env == 'production') {
+                sh 'kubectl apply -f kubernete/prod-deployment.ymal'
+           } else  {
+               sh 'kubectl apply -f kubernetes/dev/-deployment.ymal'
+
+                  }
+               }
+           }
+        }
+     }
+  }
+
+
+stage: 
+   - Build
+   - push
+   - deploy
+  
+build:
+    stage: build
+    script:
+      - docker build -t ankit-web-app
+push:
+  stage: push
+  script:
+     - docker login -u "$CI_REGISTRY-USER' -P "$CI_REGISTRY_PASSWORD"
+     - docker push ankit-web-app
+deploy:
+   stage: deploy
+   script:
+     - |
+     if ["$CI-COMMIT-REF-NAME" == "MAIN"]; then
+          kubectl apply -f kubernetes/prod-deployment.yaml
+     else
+        kubectl apply -f kubernestes/dev-deployment.yaml
+      fi
+
+DOCKER
+FROM ubuntu
+   RUN apt update &&
+      apt install curl -y && \
+      apt instal vim -y
+    cmd ["echo", "Hello Pathnex"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

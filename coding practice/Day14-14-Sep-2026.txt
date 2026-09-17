@@ -1,0 +1,149 @@
+```
+  - name: Setup Nginx with Reverse Proxy
+    hosts: all
+    become: yes
+      tasks: 
+       - name: Install nginx
+          yum:
+            name: nginx
+            state: present
+       - name: configure nginx as reverse proxy
+         template:
+          src: reverse-proxy.conf.j2
+          dest: /ect/nginx/conf.d/reverse-proxy.conf
+       - name: Restart nginx service
+         service: 
+           name: ngix
+           state: restarted
+           enabled: yes
+
+resource "aws_s3_bucket" "Ankitaws_bucket" {
+      bucket = "Ankitaws_bucket" 
+       versioning {
+          enabled = true
+    }
+      logging {
+   target_bucket = "Anktaws-log-bucket"
+     target_prefix = "logs"
+
+apiVersion: networking.k8s.io/v1
+   metadata: 
+     name: Ankitaws-ingress
+     kubectl get ingress
+      annotations:
+         nginx.ingress.kubernetes.io/rewrite-target: /
+   rules:
+      - host: Ankitaws.local
+   http:
+   paths:
+     - path: /
+       pathtype: prefix
+     backend:
+       service:
+          name: Ankitaws-service
+       port:
+         number: 80
+
+pipeline {
+   anyagent 
+     stages {
+    stage('build') {
+          steps {
+      echo'building docker image...'
+      docker.build('Ankitaws-web-app')
+
+    }
+}
+
+    stage('test') {
+       steps {
+         echo 'Running tests....'
+    } 
+}
+
+stages('Deploy to kubernetes') {
+   steps {
+      script {
+           sh 'kubectl apply -f kubernetes/deployment.yaml'
+            }
+         }
+       }
+    }
+}
+
+
+strage: 
+   - build
+   - push
+   - deploy
+build:
+  stage: build
+  script:
+    - docker build -t Ankitaws-web-app
+push:
+  stage: push
+  script:
+     - docker login -u "$CI_REGISTRY_USER" -P "$CI_REGISTRY_PASSWORD"
+     - docker push Ankitaws-web-app
+deploy:
+  stage: deploy
+  script:
+      - helm upgrate --intall Ankit-nginx Ankitaws/nginx - ingress
+  
+Docker cmd vd Entrypoint
+FROM ubuntu
+ENTRYPOINT ["echo"]
+CMD ["Hello Ankit"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
