@@ -1,0 +1,210 @@
+Ansible configure HAproxy for load balancing
+- name: Setup HAproxy Load Balancer
+  hosts: all
+  become: yes
+    tasks:
+      - name: Install Haproxy
+        yum:
+         name: haproxy
+         state: present
+      - name: Configure HAProxy
+        template:
+          src: haproxy.cfg.k2
+          dest: /etc/haproxy/haproxy.cfg
+     - name: Start HAproxy Service
+       service:
+         name: haproxy
+         state: started
+         enabled: yes
+ 
+Terraform - mutli-region auto-scaling group with ALB
+resource         = "aws_lb" "Ankit-lb" {
+   name          = "ankit-lb"
+   name          = false
+   internal      = "application"
+   security_group =[aws_security_group.allow_ssh_http.id]
+   subnets        =[aws_subnet.public.id, aws_subnet.public2.id]
+}
+
+resource "aws_autocaling_group" "Ankit-asg" {
+     desired_capacity   = 3
+      max_size          = 5
+      min_size          = 2
+      VPC_zone_identifier = [aws_submet.public.id, aws_subnet.public2.id]
+      launch_configuration = aws_launch_configuration.pathnex_config.id
+}
+
+
+Kubernetes - Horizontal 
+apiVersion: apps/v1
+kind: deployment
+metadata:
+   name: Ankit-web-app
+spec: 
+  replicas: 3
+  selector:
+    matchLabels:
+       app: Ankit-web-app
+    template:
+      metadata:
+          labels:
+            app: Ankit-web-app
+        spec:
+          container:
+             - name: nginx
+               imgage: nginx
+               port:
+                 - container: 80
+
+---
+apiVersion: autoscaling/v2
+kind: Horizontalpodautoscaler
+metadata:
+   name: Ankit-web-app
+ spec:
+   scaleTargetref:
+      apiverin: apps/v1
+      kind: deployment
+      nameL Ankit-web-app
+   minreplicas: 2
+   maxreplicas: 10
+   targetCPUUtilizationpercentage: 80
+
+jankis file - blue green deployment stategy
+ pipeline {
+    agent any
+     stage { 
+      stage('build') {
+         steps {
+           echo 'building docker image...'
+           docekr.build('ankit-web-app')
+         }
+      }
+     stage('test') {
+       steps {
+        echo 'Runing tets....'
+     }
+   }
+    
+     stage('Blue-Green Deployment') {
+         steps {
+             script {
+                sh 'kubectl apply -f kubernetes/blue-deployment.yaml'
+                sh 'kubectl apply -f kubennetes/green-deployment.yaml'
+                sh 'kubectl rollout status deployment/blue-deployment'
+                sh 'kubectl rollout status deployment/green-deployment'
+              }
+           }
+        }
+     }
+  }
+
+Gitlab CI/CD 
+  stage:
+     - build
+     - push
+     - deploy
+ buil:
+   stage: build
+   script: 
+      - docker build -t Ankit-web-app
+ push:
+   stage: push
+   script: 
+    - docker login -u "$CI_REGISTRY-USER" -p "$CI_REGISTRY_PASWORD"
+    - dokcer push Ankit-web-app
+ deploy
+   stage: deploy
+   script:
+     - kubectl apply -f kubernetes/blue-deployment.yaml
+     - kubectl apply -f kubernete/gree-deployment.yaml
+     - kubectl rollout status deployment/blue-deployment
+     - kubectl rollout status deployement/green-deployment
+
+docker 
+redis container
+docker run -d --name Ankit-redis redis
+
+real path
+/data
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
