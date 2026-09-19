@@ -1,0 +1,2 @@
+Today revised helm is package manager to automate, deploy,scalling management for application
+Today try to speack english with someone to doing the practice
