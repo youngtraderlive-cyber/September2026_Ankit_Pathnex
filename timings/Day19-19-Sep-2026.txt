@@ -1,0 +1,2 @@
+Today I am watch the video for git, 
+I understand , how to install in local machine,how and why push in git repository
