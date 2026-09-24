@@ -1,0 +1,129 @@
+```yaml
+  - name: Deploy Docker containers with helm
+    hosts: localhost
+    tasks:
+        - name: Install helm
+          command: curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+        - name: Deploy microservice with helm
+          command: helm install ankit-app ./microservice-chart
+        
+Terraform - Multi-Module Infrastucture with outputs
+  module "Ankit-vpc" {
+     source = "./vpc"
+  }
+
+module "Ankit_instance" {
+   source = "./instance"
+   vpc_id = module.Ankit-vpc.vpc_id
+ }
+
+output "instance_id" {
+  value - module.ankit_instance.instance_id
+}
+
+Kubernetes - helm based autoscaling deployment
+ apiVersion: app/v1
+ kind: Deployment
+ metadata:
+    name: Ankit-web-app
+  spec:
+    replicas: 3
+    selector:
+      matchLabels:
+        app: Ankit-web-app
+     tamplate:
+       metadta:
+        labels:
+          app: Ankit-web-app
+      spec:
+        container:
+          - name: nginx
+            image: inginx
+            ports:
+              - containerPort: 80
+
+---
+apiVersion: autosacling/v2
+kind: horizontalpodautoscaler
+metadata:
+   name: ankit-web-app
+ spec:
+   scaleTargetRef:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: Anit-wab-app
+  minreplicas: 2
+  mxreplicas: 10
+  targetCPUUtilizationpercentage: 80
+
+jankins file
+ pipeline {
+   agnet any
+        stages {
+        stage('Scale UP') {
+          echo 'Scaling up jenkins pipeline agnets for heavy workloads..'
+          // Simulating scaling logic
+      }
+   }
+
+   stage('Build') {
+      steps {
+          echo 'Building project..'
+       }
+    }
+
+   stage('Deploy') {
+     steps {
+        echo 'Deploying project'
+        }
+      }
+    }
+
+Docker 
+# Health check
+FROM nginx
+HEALTHCHECK CMD curl --fail http://localhost | | exit 1 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
