@@ -1,0 +1,214 @@
+Multi-cluster kubernetes management
+- name: deploy nginx acress multiple kubernetes clusters
+  hosts: localhost
+  tasks:
+     - name: configure kubectl for cluster 1
+       command: kubectl --conext=us-est confir use-context us-east-cluster
+     - name: deploy nginx on cluster 1
+       command: kubectl apply -f kybernetes/deployment.yaml
+     - name: configure kubectl for cluster 2
+       command: kubectl --context=us-west config use-context us-west-cluster
+     - name: deploy nginx on cluster 2
+       command: kubectl apply -f kubenetes/deployment.yaml
+  
+Terraform - multi-region kubernetes cluster with EKS and GKE
+resource  "aws_eks_cluster" "Ankit_eks" {
+  name         = "Ankit-eks-cluster"
+  role_arn     = aws_iam_role.eks_cluster_role.arn
+
+ vpc_config {
+    subnet_ids  = [ aws_subnet.ankit_subnet.id]
+  }
+
+ depends_on = [aws_iam_role_policy_attached.eks_cluster_rile_policy]
+ }
+
+
+resource "google_container_cluster" "Ankit_gke" {
+   name      = "ankit-gke-cluster"
+   location  = "us-centrall-a"
+   initial_node_count = 3
+   node_config {
+      machine_type  = "n1-standard-1"
+   }
+ }
+
+Kubernetes - federated deployment with multiple clusters
+apiVersion: apps/v1
+kind: deployment
+metadata:
+   name: Ankit-deployment
+ spec: 
+   replicas: 3
+   selector: 
+    matchLabels:
+      app: Ankit-app
+    template:
+      metadata: 
+        labels:
+          app: Ankit-app
+    spec:
+      containers:
+          - name: nginx
+            imgae: nginx
+            ports:
+             - containerPort: 80
+
+---
+apiVersion: federation.k8s.io/v1betal
+kind: federationDeployment
+metadata:
+  name: Ankit-federation-deployment
+  namesapce: default
+spec:
+  template:
+    spec:
+     replicas: 3
+     selector:
+      matchLabels:
+        app: Ankit-app
+     template:
+         metadata:
+          labels:
+             app: Ankit-app
+      spec:
+        container:
+       - name: nginx
+         image: nginx
+         ports:
+           - containerPort: 80
+
+Jenkinsfile - Multi-cluster deployement strategy
+pipeline {
+   agnet any
+    stages {
+      stage('Deploy to cluster 1') {
+        steps {
+           script {
+             sh 'kubectl --context=us-east-cluster apply -f kubenernetes/deployment.yaml'
+           }
+        }
+    }
+
+      stage('Deploy to cluster 2') {
+         stpes {
+           script {
+             sh 'kubectl --context=us-west-cluster apply -f kubernestes/deployment.yaml
+               }
+             }
+          }
+       }
+    }
+
+Gitlab CI/CD 
+    stages: 
+       - deploy
+
+deploy_cluster_1:
+     stage: deploy
+     script: 
+      - kubectl --context=us-east-cluster apply -f kubernestes/deployment.yaml
+deploy_cluster_2:
+      stage: deploy
+      script: 
+        - kubectl  -- context=us-west-cluster apply -f kubernetes/deployment.yaml
+
+
+ Docker
+compose with Mysql
+ version: '3'
+ services:
+    db:
+     image: mysql:8
+     container_name: Ankit-db
+     environment:
+        MYSQL_ROOT_PASSWORD: root
+  web:
+    image_nginx
+    container_name: Ankit-web
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
