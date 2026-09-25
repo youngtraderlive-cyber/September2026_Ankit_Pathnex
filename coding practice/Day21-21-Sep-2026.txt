@@ -1,0 +1,166 @@
+```yaml
+  - name: Backup and Restore file
+    hosts: all
+    become: yes
+      tasks:
+        - name: Create backup of /etc directory
+          command: tar -czvf /tmp/etc-backup.tar.gz /etc
+        - name: copy backup to remote server
+          copy:
+            src: /tmo/etc backup.tar.gz
+            dest: /tmp/etc-backup.tar.gz
+        - name: Restore backup from remote server
+          command: tar -xzvf /tmp/etc-backup.tar.gz -C /
+
+Terraform
+resource "aws_s3__backup" "Ankit_backup" {
+     bucket = "Ankit-backup-bucket"
+     region = "ap-sout-1"
+    
+     versioning{
+       enabled = true
+   }
+}
+
+resource "aws_s3_backet" "Ankit-backup-bucket_eu" {
+   bucket = "pathnex-backup-bucket-eu"
+   region = "eu-west-1"
+
+ versioning {
+    enabled = true
+   }
+ }
+
+
+resource "aws_s3_bucket_object" "ankit_backuo_file" {
+   buckup = aws_s3_bucket.pathnex_bucket.bucket
+   key    = "backup.tar.gz"
+   source = "Ankit-backup.tar.gz"
+}
+
+
+Kubernetes disaster recovery with persistent volume
+apiVersion: app/v1
+kind: Statefulset
+metadata:
+  name: Ankit-statefulset
+spec:
+  serviceName: "Ankit"
+  replicas: 3
+  selector: 
+   matchLabels:
+    app: Ankit
+  templare:
+   metadata:
+     labels:
+       app: Ankit
+   spec: 
+     container:
+        - name: nginx
+          image: nginx
+          volumeMounts:
+             - mountPath: /user/share/nginx/html
+               name: web-content
+
+   volumeClaimTemplate:
+     - metadata:
+         name: web-content
+     spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resource:
+         request:
+           storage: 5Gi
+
+Jankins file
+ Pipeline {
+    any agent
+       stages {
+         stage('Buckup') {
+               echo 'Backing up jenkins workspace....'
+               sh 'tar -czvf /tmp/jenkins-backup.tar.gz ${WORKSPACE}'
+          }
+        }
+     stage('Restore') {
+      steps {
+         echo 'Restoring Jenkins workspace....'
+         sh 'tar -xzvf /tmp/jenkins-backup.tar.gz -C ${WORKSPACE}'
+          }
+        }
+     }
+  }
+
+Gitlab CI/CD
+   - buckup
+   - restore
+  
+ backup:
+    stage: backup
+      script:
+        - tar -czyf /tmp/backup.tar.gz kubernetes/deployment.yaml
+      
+restore:
+   stage: restore
+   script:
+      - tar -xzvf /tmp/backup.tar.gz  -c Kubernetes/
+
+
+Docker
+Version: '3'
+service:
+    web:
+       image: nginx
+        container_name: Ankit_nginx
+        ports:
+           - "80:80"
+
+https:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
