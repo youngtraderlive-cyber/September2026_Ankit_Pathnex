@@ -1,0 +1,183 @@
+- name: Set up prometheus Node Exporter
+  hosts: all
+  become: yes
+    tasks: 
+      - name: Install prometheus node exporter
+        yum:
+          name: prometheus-node-exporter
+          state: present
+      - name: Start prometheus node exporter serivce
+        service:
+         name: prometheus-node-exporter
+        enabled: yes
+
+terraform - create cloud watch alarms
+resource "aws_Cloudwatch_metric_alarm" "Ankit-_cpu_alarm {
+   alarm_name          = "ankit-cpu-utilization-high
+   comparison_operator = "greaterThanThreshold"
+   metric_name         = "1"
+   namespace           = "AWS/CE2"
+   period              = "60"
+   statics             = "Average"
+   threshold           = "80"
+
+
+dimensions = {
+  InstanceId = aws_instace_ankit_ec2.id
+ 
+ }
+   alarm_action = [aws_sns_topic.ankit_alerts] 
+}
+
+resource "aws_sns_topic" "ankit_alert" {
+   name = "ankit-alerts"
+
+Kubernetes
+apiVersion: apps/v1
+kind: deployment
+metadata: 
+   name: prometheus
+  spec:
+   replicas: 3
+   selector: 
+     matchLabels:
+  template: 
+    metadata:
+        labels:
+         app: prometheus
+      spec:
+      container
+          - name: prometheus
+            image: pro/prometheus:latest
+            port:
+             - containerPort: 9090
+---
+apiVersion: app/v1
+kind: deployment
+metadata: 
+  name: grafana
+ spec:
+   replicas: 1
+   selector: 
+       matchLabels:
+         app: grafana
+   spec:
+    container:
+        - name: grafana
+          image: grafana/grafana:latest
+          port: 
+           - containerPort: 300
+
+jekinsfile
+pipeline {
+   agent any
+      stages { 
+        steps('Monitor') {
+          steps {
+             script {
+                   echo 'tragging cloud watch alarm if CPU exceeds 80%'
+                   sh 'aws cloudwatch put-metric-data --namespace "AWS/EC2" --metri
+                 }
+              }
+          }
+
+        stage("test") {
+          steps {
+             echo "running tests...'
+              }
+            }
+        }
+    }
+
+Gitlab CI/CD
+ stage:
+   - moniter
+   - test
+ monitor:
+     stage: monitor
+     script:
+        - aws cloudwatch put-metric-data -namespace "aws/EC2" --metric-name "CPUUtilization"
+ test:
+   stage: test
+   script:
+     - echo "Running tests..."
+
+Docker 
+# .dockerignore file
+node_modules
+.git
+temp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

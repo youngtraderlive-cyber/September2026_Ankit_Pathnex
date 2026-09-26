@@ -1,0 +1,1 @@
+Today revised Linux topic like  ls, chmod, chown. tail, head, cat. mkdir, pwd, whoami, absulote path , relative path. in, find,
