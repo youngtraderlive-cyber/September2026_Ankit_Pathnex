@@ -1,0 +1,2 @@
+Today learn linux command like - tar, pgrep, sed and awk ,top for process running real time, free -h for memory sapce, df -h for disk storage, 
+And learn english speaking  

@@ -1,0 +1,161 @@
+Ansible- Implementing SSH Key-based authentication
+- name: Implement SSH Key Authentication
+  hosts: all
+  become: yes
+    tasks:
+       - name: Generate SSH Key pair
+         command: ssh-keygen -t rsa -b 2048 -f /home/user/.ssh/id_rsa -N ""
+       - name: Add SSH public key to authorized_keys
+         authorized_key:
+           user: user
+           status: present
+           key: "{{ lookup('file', '/home/user/.ssh/id_rsa.pub')) }}"
+
+Terraform - Enabling VPC Flow Logs for Security
+resource "aws_vpc_file_log" "ankit_flow_log" {
+   log_group_name = "ankir_flow_log"
+   vpc_id         = aws_vpc.ankit_vpc.id
+   traffic_type   = "All"
+   log_description_type = "cloud-watch-logs"
+
+resource "aws_cloudwatch_log_group" "ankit_flow_logs_group" {
+    name = "ankit-flow-logs"
+}
+
+
+Kubernetes
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadta:
+  name: ankit-web-policy
+spec:
+  podSelector
+    matchLabels:
+       app: ankit-web-app
+  policyTypes: 
+      - Ingress
+      - Egress
+  ingress:
+     - from:
+          - podSelector:
+              matchLabels:
+                app: ankit-api
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: ankit-database
+
+
+Jenkings file
+pipeline {
+  agent any
+     environment {
+         AWS_ACCESS_KEY_ID = credentials('aws-access-key')
+         AWS_SECRET_ACCESS_KEY = credential('aws-secret-key')
+ }
+
+  stages {
+     stage('Build') {
+         steps {
+            echo 'Building Docker image...'
+            docker.build('ankit-web-app')
+      }
+   }
+
+     stage('Deploy') {
+       steps {
+            echo 'Deploying to AWS EC2..'
+            sh 'aws ec2 un-instances --image-id ami-0abcd1234 --count 1 --instace-type t2.micro
+             }
+           }
+        }
+     }
+
+
+Gitlab CI/CD
+stages:
+  - build
+  - deploy
+
+Build:
+  stage: build
+  script:
+     - docker build -t ankit-web-app
+
+deploy
+  stage: deploy
+  script:
+     - echo "deployment with secure credentials"
+     - aws ec2 run-instace --image-id ami-0abcd1234 --count 1 --instance-type.micro --access-key
+
+Docker
+#docker logs & inspect
+dokcer logs pathnex-nginx
+docker ispect pathnex-nginx
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
