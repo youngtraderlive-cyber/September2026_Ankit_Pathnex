@@ -1,0 +1,1 @@
+Today creating kubernetes cluster also create node for deployment pods 

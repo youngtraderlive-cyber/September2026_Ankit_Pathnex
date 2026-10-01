@@ -1,0 +1,132 @@
+```yaml
+   - name: Complete Deployment Setup
+     host: all
+     become: yes
+     tasks:
+         - name: Deploy Nginx, MySQL, and Redis with Docker 
+           command: docker-compose -f /path/to/docker-compose.yml up -d
+  
+Terraform provisioning Multi-Tier Application with VPc and security 
+resource "aws_vpc" "ankit_vpc" {
+    cidr_block = "10.0.0.0/16"
+   }
+
+
+resource "aws_instance" "ankit_app" {
+   ami               = "ami-0fsdgdfg0151501dg"
+   instance_type     = "t2.medium"
+   subnet_id         = aws_subnet.ankit_subnet.id
+   security_group    = [aws_security_group.ankit_sg.name]
+ 
+}
+
+Kubernetes - Deploy Full Application Stack
+apiVersion: app/v1
+kind: deployment
+metdata:
+   name: ankit-app
+  spec:
+    replicas: 2
+    selector:
+     matchLabels:
+        app: ankit-app
+     templete:
+       metadata:
+         labels:
+            app: ankit-app
+      spec:
+        containers:
+          - name: nginx
+            image: nginx
+            ports:
+              - containerPorts: 80
+
+
+Docker
+# docker Security & Cleanup
+FROM nginc
+RUN useradd ankituser
+USER ankituser
+
+Commands
+docker contianer prune
+docker image prune
+docker volume prune
+docker network prune
+docker system prune -a
+
+Final docker project
+Version: '3'
+service:
+  frontend:
+     image: nginx
+     container_name: ankit-frontend
+     port:
+       - "80:80"
+     backend:
+        build: ./backend
+        container_name: ankit-backend
+        ports:
+         - "5000:5000"
+     database:
+        image: mysql:8
+        container_name
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
