@@ -1,0 +1,49 @@
+```yaml
+  - nmae: Setup VPC peering Bwtween Accounts
+    hosts: all
+    taks:
+      - name: Create VPC peering connection
+        command: aws ec2 create-vpc-peering-connection --vpc-id vpc-12345678 --peer-vpc-id
+Terraform
+  Resource "aws_vpc_peering_connection" "ankit_peering" {
+   vpc_id         = aws_vpc.ankit_vpc.id
+   peer_vpc_id    = aws_vpc.peer_vpc.id
+  }
+
+resource "aws_route" "ankit_route" {
+    route_table_id           = aws_route_table.ankit_rt.id
+    destination_cidr_block = "10.0.0.0/16"
+    vpc_peering_connection_id = aws_vpc_peering_connection.ankit_peering.id
+ }
+
+kubernetes - multi-Cluster VPC peering and networ policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ankit-voc-policy
+spec:
+  podSelector:
+     matchLabels:
+        app: ankit-app
+     ingress:
+       - from:
+            - podSelector:
+                 matchLabels:
+                   app: ankit-db
+
+
+
+docker
+# docker save, load $ backup
+docker save -o ankit-nginx.tar ankit-nginx
+
+docker load -1 ankit-nginx.tar
+
+
+# Bash
+
+docker run --rm -v ankit-volume:/data -v$(pwd):/backup ubuntu tar czf /backup ankit-backup
+
+
+
+
