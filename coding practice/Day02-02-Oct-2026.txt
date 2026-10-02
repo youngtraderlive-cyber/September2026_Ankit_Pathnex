@@ -1,0 +1,272 @@
+```yaml
+   - name: Install and start nginx on ankit
+     hosts: all
+     become: yes
+      tasks:
+         - name: Install nginx
+            yum:
+              name: nginx
+              state: present
+         - name: Enable nginx
+            service:
+              name: nginx
+              state: started
+             enabled: yes
+
+provider "aws" {
+  region = "ap-sout-1" 
+}
+
+resource "aws_instance" "ankiteEC2" {
+   ami             =  "ami-0565fgfgdg555dg"
+   instance_type   =  "r5.2xlarge"
+   
+   tags = {
+      Name         =  "ankit-server"
+      Environment  =  "Training"
+      Owner        =  "ankitstudent"
+ }
+}
+
+
+apiVersion: app/V1
+kind: deployment
+
+ metadata: 
+    name: ankit-deployment
+ 
+ spec: 
+  Replicas: 2
+   
+    selector:
+      matchLabels:
+         app: ankit-app
+  
+  template:
+     metadata:
+       labels:
+          app: ankit-app
+
+  spec:
+     container:
+        - name: app
+          image: nginx
+          ports:
+             - containerPort: 80
+Shell Script - Disk Usage
+#!/bin/bash
+df -h
+
+
+
+Docker
+docker pull ubuntu
+docker image
+docker ps -a
+
+Docker file
+FROM ubuntu:22.04
+RUN apt update
+CMD ["echo", "Hello Ankit"]
+
+Ansible Task Install Nginx on pathnex Server
+
+---
+ - name: Install nginx on Ankit server
+   hosts: all
+   become: yes
+     tasks:
+        - name: Intall nginx
+           yum:
+             name: nginx
+             state: present
+
+Terraform
+ 
+provider "aws" {
+ region   = "ap-east-1"
+}
+
+resource    = "aws_instance" "AnkitEC2" {
+  ami       = "ami-odfd46554fd"
+  instance_type = "c5.large"
+ 
+tags = {
+  Name = "ankit-ec2"
+  }
+}
+
+Kubernetes 
+apiVersion: v1
+kind: pod
+metadata:
+   name: ankit-pod
+spec: 
+  containers:
+    - name: web
+      image: nginx:latest
+      ports:
+        - containerPorts: 80
+
+Shell script 
+#!/bin/bash
+echo "date: $(date)"
+echo "hostname: $(hostname)"
+
+pipeline {
+   agent any 
+     stages {
+       stage('checkout') {
+           steps {
+            git branch: 'main', url: 'https://github.com/Pathnex/sample-java-app.git'
+        }
+    }
+
+    stage('List files') {
+       steps {
+           sh 'ls -la'
+        }
+      }
+    }
+  }
+
+Gitlab
+
+stage:
+   - checkout
+ 
+
+git-checkout
+   stage: checkout
+   script:
+      - git clone 
+      - cd sample-java-app
+      - ls -la
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+   
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
