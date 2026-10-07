@@ -1,0 +1,1 @@
+Today write code and revised terrafrom is open source infrastructure as code it allow to persive data center infrastructure for high level configuration know as hashicorp congifuration lagurage. also user to automate the managemment of infrastructure server, storage and network more. declrative cynex, plateform, infrastructureas code, resource, module , state, provider

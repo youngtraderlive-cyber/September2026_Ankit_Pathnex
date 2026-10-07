@@ -1,0 +1,118 @@
+- name: setup nginx with custom config
+  hosts: all 
+  become: yes
+    taks:
+      - name: Install nginx
+         yum:
+          name: Nginx
+          state: enable
+      - name: Copy custom nginx.conf
+        copy:
+          src: ngix.config
+          dest: /ect/nginx/nginx.conf
+      - name: Start nginx service
+        service: 
+         name: nginx
+         state: started
+         enabled: yes
+
+resource "aws_iam_role" "ec2_role" {
+  name: = "ankit_ec2_role"
+   assume_role_policy = jsonecode({
+    version = "2012-10-07"
+      statement = [
+      {
+         action = "sts:AssumeRole"
+         effect = "Allow"
+         principal = { 
+            service  = "ec2.amazonaws.com
+           }
+         }
+       ]
+    })
+  }
+
+resource "aws_instance" "ankit_ec2" {
+    ami            = "ami-1dfdfdf66626"
+    instance_type  = "t2.medium"
+    iam_instance_profile = aws_iam.ec2_role.name
+    tags {
+      Name:  = "ankit-ec2"
+    }
+ }
+
+
+Kubernetes - configMap and Secret Management
+apiVersion: V1
+kind: Configmap
+metadata:
+  name: ankit-config 
+ data:
+  app.properties: | 
+     key=value
+
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+   name: ankit-secret
+  type: opaque
+data:
+  password: cd665151dfdf=
+  
+#!/bin/bash
+tar -czf /var/log/archived_logs.gz/var/log*.log
+
+Docker Java Application
+Class Hello {
+    Public static void main(String[] args) {
+        system.out.printIn("Hello Ankit");
+     }
+  }
+
+Docker file
+FROM openjdk:17
+WORKDIR /opt/ankit/java-app
+COPY hello.java /opt/ankit/java-app/
+RUN javac /opt/ankit/java-app/hello.java
+RUN java /opt/ankit/java-app/hello.java
+CMD ["java","-CP", "/opt/ankit/java-app", "Hello"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
