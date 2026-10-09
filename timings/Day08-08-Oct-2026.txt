@@ -1,0 +1,2 @@
+today I am try to write code watching any code chart and I am learning CD/CD
+Gitlab CD/CD jankins CI/CD pipeline
