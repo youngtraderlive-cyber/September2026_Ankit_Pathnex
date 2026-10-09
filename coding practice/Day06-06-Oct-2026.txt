@@ -1,0 +1,87 @@
+Ansible Install Docker
+
+- name: Install docker
+  hosts: all
+  become: yes
+    tasks:
+      - name: Install docker
+          yum:
+            name: docker
+            state:present
+      - name: Start docker
+        service: 
+            name: docker
+            state: started
+             enabled: yes
+
+Terraform - provisioning EC2 with vpc
+resource: "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16" 
+}
+
+resource "aws_instance" "ankit_ec2" {
+    ami             =  "ami-fdfds545455454"
+    instance_type   = "t3.medium"
+    subnet_id       = aws_subnet.main.id
+    tags = {
+      Name = ankit-ec2"
+    }
+  }
+
+
+kubernetes pod with volume mount
+apiVersion: v1
+kind: pod
+metadata:
+  name: ankit-pod
+spec: 
+   container:
+     - name: web
+       image: Nginx
+       volumemount
+          - mountPath: /var/share/nginx/html
+            name: html-volume
+    volume:
+      - nameL html-volume
+        hostPath:
+           path: /data
+           type: Directory
+
+
+shell script 
+#!/bin/bash
+service=("nginx" "docker" "httpd")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
