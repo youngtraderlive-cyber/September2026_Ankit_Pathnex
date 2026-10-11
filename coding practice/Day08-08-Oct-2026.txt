@@ -1,0 +1,177 @@
+Ansible
+- name: Installing docker pipeline
+  hosts: all
+  become: yes
+     tasks:
+         - name: Install dependencies
+            yum:
+               name: "python3-pip"
+               state: present
+         - name: Docker-compose
+           pip:
+             name: docker-compose
+
+
+Terraform
+
+resource "Aws_security_group" "allow_ssh_http" {
+   name            =  "allow_ssh_http" 
+   description     = "Allow SSH and HTTP access"
+   ingress {
+     front_port  = 22
+     to_port     = 22
+     protocol    = "tcp"
+     cidr_block  = ["0.0.0.0/0"]
+}
+
+   ingress {
+     front_port     = 80
+     to_port        = 80
+     protocol       = "tcp"
+     cidr_blocks    = ["0.0.0.0/0"]
+}
+
+
+resource  "aws_instace" "Ankit-ec2" {
+  ami            =  "ami-asad5564454848"
+  instace_type   = "t3.micro"
+  security_group = [aws_security_group.allow_ssh_http.name]
+
+ebs_block_device {
+   device_name   = "/dev/sdh"
+   volume_size   = 30
+
+  }  
+}
+
+
+Kubernetes - Service with nodeport
+
+apiVersion: v1
+kind: service
+metadata:
+    name: ankit-app
+spec:
+   type: Nodeport
+   selector:
+     app: ankit-app
+ports:
+   - protocol: TCP
+     port:  80
+     nodePort: 30007
+
+Jenkinsfile - docker build and deploy
+
+pipeline {
+   agent any 
+     stages {
+        stage('Build docker image') {
+            steps {
+               script {
+                  docker.build('Ankit-app')
+                }
+             }
+         }
+       stage('Push docker image') {
+           steps {
+             script {
+                docker with registry('https://docker.io', 'docker-credentials') {
+                    docker.image('akit-app').push('latest')
+                           }
+                        }
+                    }
+                }
+          }
+     }  
+
+
+GitLab CI/CD - Build & Push Docker Image
+ stages:
+    - build
+    - push
+
+  build:
+     stage: build
+     script:
+         - docker build -t ankit-app
+  push:
+    stage: push
+     script
+        - docker login -u $CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+        - docker push ankit-app
+
+Docker
+Alpine Linnux
+
+FROM alpine:latest
+WORKDIR /opt/ankit/alpine-app
+CMD ["echo", "Hello ankit"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

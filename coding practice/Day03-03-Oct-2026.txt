@@ -1,0 +1,155 @@
+ansible
+ - name: Install apache & start service
+   hosts: all
+   become: yes
+      tasks:
+        - name: Install apache
+           yum:
+             name: httpd
+             state: present
+        - name: start apache
+          service:
+             name: httpd
+             state: started
+             enabled: yes
+
+Terraform
+
+provider "aws" {
+  region = "t3.micro"
+}
+  
+resource "aws_instace" "Ankitssh" {
+  ami    =  "ami-sds545455454"
+  instance_type = "t3.micro"
+  tages = { 
+       Name   = "ankit-t3"
+   }
+ }
+
+
+apiVersion: app/V1
+kind: Replicaset
+metadata:
+ name: ankit-replicaset
+spec:
+  replica: 3
+   selector:
+      matchLabels:
+       app: ankit-app
+     template
+       metadata:
+           labels:
+              app: ankit-app
+         spec:
+            container:
+                - name: app
+                  image: nginx
+                  ports:
+                    - containerPort: 80
+
+shell script - user infor
+#! /bin/bash
+echo "Current user: $(whoami)"
+echo "Current user group: $(group)"
+
+Docker
+FROM nginx:latest
+COPY index.html /usr/share/nginx/html/index.html
+
+
+HTML
+
+--- 
+ 
+ - name: Create Ankit user
+   hosts: all
+   become: yes
+      tasks:
+          - name: Create user ankit dmin
+             user:
+             name: ankit-admin
+             shell: /bin/bash
+
+
+provider "aws_security_group" "ankitsg" {
+    name: "ankitsg" 
+    decription: "ankit sg for ssh"
+
+   ingress {
+     from_port   = 22
+     to_port     = 22
+     protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
