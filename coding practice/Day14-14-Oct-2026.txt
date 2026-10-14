@@ -1,0 +1,217 @@
+- name: Setup nginx with reverse proxy
+  hosts: all
+  become: yes
+     tasks:
+         - name: Intall nginx
+             yum:
+               name: ngix
+               stae: present
+         - name: Configure as reverse proxy
+           template:
+              src: neverse-proxy.conf.j2
+              dest: /etc/nginx/conf.d/reverse-proxy.conf
+         - name: Restart nginx service
+           service:
+               name: ngix
+               state: restarted
+               enabled: yes
+
+
+terraform S3 bucket versioning and logginf
+
+resource "aws_s3_bucket" "ankit_bucket" {
+       
+     bucket = "ankit-bucket" 
+     versioning {
+             enabled = ture
+   }
+
+logging {
+     target_bucket = "ankit-log-bucket"
+     taget_prfix = "logs/"
+}
+
+
+kubernetes
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: ankit-ingres
+annotations:
+    nginx.ingress.kubernestes.io/rewrite-target: /
+spec:
+  rules:
+- host: ankit.local
+  http:
+- path: /
+  pathType: prefix
+  backend:
+     service:
+       name: ankit-service
+       port:
+         number: 80
+
+jenkinsfile build, test and deploy
+
+pipelie {
+    agent any 
+       stages {
+         stage('Buil') {
+           steps {
+               echo 'Building docker image
+               docker.build('ankit-web-app')
+            }
+        }
+        stage('Test') {
+             steps {
+                echo 'Running tests'
+              }
+          }
+         stage('Deploy') {
+               steps {
+                  script {
+                       sh. kubectl apply -f kubernetes/deployment.yaml
+                 }
+             }
+         }
+    }
+}
+
+
+
+Gitlab Multisatge deployment with helm 
+
+stage: 
+    - build
+    - push
+    - deploy
+
+build:
+  stage: build
+  script:
+      - docker build -t ankit-web-app
+push:
+   stage: push
+   script:
+       - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+       - docekr push akt-web-app
+deploy:
+   stage: deploy
+   script:
+       - helm upgrade --install ankit-nginx ankit/nginx-ingress
+
+
+docker dmc entrypoint
+FROM ubuntu
+ENTRYPOINT ["echo"]
+CMD ["Hello Ankit"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
