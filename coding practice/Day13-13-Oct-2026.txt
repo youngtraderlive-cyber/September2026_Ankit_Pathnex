@@ -1,0 +1,227 @@
+- name: Setup nginx on multiple nodes
+  hosts: all 
+  become: yes
+     tasks:
+         - name: Intall nginx
+             yum:
+              name: nginx
+              state: present
+         - name: start nginx service
+             service:
+                 name: started
+                 enabled: yes
+
+resource "aws_im_policies" "example_policy" {
+   name            = "Ankit-policy"
+   description     = "policy for ankit application"
+   policy          = "jsoncode({
+      version      = "2012-10-17"
+      statement    = [
+         {
+              Action   = "s3:ListBlucket"
+              Effect   = "Allow"
+              resource = "armaws:s3:::ankit-bucket"
+
+Kubernetes Deploy with nginx
+
+apiVersion: v1
+kind: ConfigMa
+metadata:
+    name: nginx-config
+data: 
+ngix.conf: | 
+    server {
+        listen 80;
+        server_name localhost;
+        location / {
+           root  /usr/share/nginx/html:
+           index index.html index.htm:
+   }
+}
+
+---
+apiVersion: v1
+kind: secret
+metadata:
+   name: ngix-secret
+type: Opaque
+data: 
+  password: cGF0aG5leHBhc3M=
+
+---
+
+apiVersion: app/v1
+kind: Deployment
+medata:
+    name: ankit-nginx
+spec:
+  replicas: 2
+selector:
+    matchLabels:
+           app: ankit-nginx
+template:
+   metadata:
+      labels:
+          app: ankit-ngix
+spec: 
+  containers:
+      - name: nginx
+        image: nginx
+ 
+volumeMounts:
+  - mountPath: /etc/nginx/nginx.conf
+    name: ngix-config
+    subpath: nginx.conf
+volumes:
+   - name: ngix-config
+      configMap:
+         name: nginx-config
+    - name: ngix-secret
+      secret:
+         secretName: nginx-secret
+
+
+jenkins
+
+pipeline {
+   agnet any 
+      stages {
+        stage('Build') {
+          stpes {
+               script {
+                 docker.build('ankit-app')
+                  }
+               }
+            }
+       stage('Deploy') {
+          stpes {
+             script {
+                 kubectl apply -f kubernetes/deployment.yaml
+               }
+             }
+          }
+       }
+    }
+
+
+GitLab CI/CD - Advanced Deployment with Helm
+
+stages:
+    - build
+    - push
+    - deploy
+
+build:
+   stage: build
+   scipt:
+     - docker build -t ankit-web-app .
+
+push:
+    stage: push
+    script:
+       - docker login -u "$CI_REGISTRY_USER" - P "$CI_REGISTRY_PASSWORD" 
+       - docker push ankit-web-app
+deploy:
+   stage: deploy
+   script:
+         - helm repo add pathnex https://charts.pathnex.com
+         - helm install pathnex-nginx pathnex/nginx-ingress
+Docker 
+COPY vs ADD
+FROM ubuntu
+COPY ankit-file.txt /opt/ankit/files/
+ADD ankit.tar.gz /opt/ankit-extraded/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
