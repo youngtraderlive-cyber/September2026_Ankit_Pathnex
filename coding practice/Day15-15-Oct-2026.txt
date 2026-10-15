@@ -1,0 +1,200 @@
+- name: Deploy a web application to multiple hosts
+  hosts: all
+  become: yes
+       tasks:
+         - name: copy web app files
+             yum:
+                src: /path/to/web/app/
+                dest: /var/www/html/
+         - name: Start web app service
+            service:
+               name: apache2
+               state: started
+               enabled: yes
+
+Terraform to ALB Application load balancer
+
+resource  "aws_instace" "ankit-ec2" {
+   name               =  "Ankit-lb"
+   internal           =  false
+   load_balancer_type =  "application"
+   security_group     = [aws_security_group.allow_ssh_http.id]
+   subnets            = [aws_subnet.public.id]
+}
+
+
+resource   "aws_instace" "ankit_ec2" {
+   ami                    = "ami-dfd56564dfd5"
+   instace_type           = "t2.micro"
+   resurity_group         = [aws_security_group.allow_ssh_http.name]
+
+tages = {
+   Name   = "Ankit-ec2"
+
+     }
+ }
+
+
+kubernets helm chart for redis with persistence
+helm install ankit-redis bitami/reis --set persistence.enabled=ture --set persistencesize=8gi
+jenkins multi environment deployment
+pipeline {
+    agent any 
+       environment {
+           IMAGE_NAME   = 'ankit-web-app'
+           DEPLOY_ENV   = 'Production'
+
+}
+
+     stages {
+        stage('Build') {
+           stpes {
+               echo 'Building Docker image...'
+               docker.build("${env.IMAGE_NAME}")
+             }
+         }
+        stage('Test') {
+            stpes {
+                 echo 'Running tests...'
+             }
+         }
+
+        stage('Deploy to Kubenetes') {
+            stpes {
+                script {
+                     if (env.Deploy_env == 'production') {
+                           sh 'kubectl apply -f kubernetes/prod-deployment.yaml'
+                         } else {
+                           sh 'kubectl apply -f kubernetes/dev-deployment.yaml'
+                        }
+                      }
+                    }
+                 }
+              }
+          }
+
+
+Gitla CI/CD  
+
+stages:
+    - build
+    - push
+    - deploy
+
+
+Build:
+    stage: build
+    script:
+         - docker build -t ankit-web-ap
+push:
+   stage: push
+   script:
+        - docker login -u "$CI_REGISTORY_USER" -p "$CI_REGISTORY_PAWSSWORD"
+        - docekr push ankit-web-app
+Deploy:
+    stage: deploy
+    script:
+           - |
+      if [ "$CI_COMMIT_REF_NAME" == "main" ]; then
+        kubectl apply -f kubernetes/prod-deployment.yaml
+      else
+        kubectl apply -f kubernetes/dev-deployment.yaml
+      fi
+
+
+FROM ubuntu
+Run apt update && \ 
+       apt install curl -y && \
+       apt intall vim -y
+CMD ["echo" , "Hello ankit"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
