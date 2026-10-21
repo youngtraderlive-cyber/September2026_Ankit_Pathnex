@@ -1,0 +1,168 @@
+Security hardening and compliance
+- name: configure firewall with iptables
+  hosts: all
+  become: yes
+     tasks:
+       - name set default policies to drop all traffic
+         command: iptables -p input drop
+       - name: allow ssh traffic
+         commandL: iptables -A INPUT -p tcp --drop 22 -j ACCEPT
+       - name: allow HTTP traffic
+         command: iptables -A Input -p tcp --dropt 80 -j ACCEPT
+       - name: Save iptables configuration
+         command: service iptables save
+
+Terraform configuration security group for ec2
+resource "aws_security_group" "ankit-sg" {
+name_prefix = "ankit-sg"
+description = "Allow SSH and HTTP"
+
+ingress {
+   from_port   = 22
+   to_port     = 22
+   protocol    = "tcp"
+   cidr_blocks = ["0.0.0.0/0"]
+}
+
+ingress {
+   from_port   = 80
+   to_port     = 80
+   protocol    = "tcp"
+   cidr_blocks = ["0.0.0.0/0"]
+}
+
+
+kubernetes RBAC configuration for access control
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Clusterrolebinding
+metadata:
+    name: ankit-cluster-admin
+subject:
+   - kind: user
+     name: ankit-user
+     apigroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: cluster admin
+
+
+jenkinsfile Secure Credentials management
+pipeline {
+   agent any
+     environment {
+            REGISTRY_PASSWORD = credentia('docker-registry-password')
+}
+
+       stages {
+          stage('Build') {
+            stpes {
+              echo 'Building docker image...'   
+
+           }
+      }
+           stage('push') {
+              steps {
+                  script {
+                     docker.withRegistry('https://docker.io','docker-credentials') {
+                    }
+                 }
+              }
+           }
+       }
+    
+Gitlab CI/CD
+
+stages: 
+    - build
+    - push
+    - deploy
+
+Build:
+    stage: build
+    script:
+        - docker build -t ankit-web-app
+
+Push:
+   stage: push
+   script:
+       - docker login -u "CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+       - docker push ankit-web-app
+deploy:
+    stage: deploy
+    script:
+           - kubectl apply - kubernetes/deployment.yaml
+
+
+
+Docker
+
+Docker Networking
+docker network create ankit-network
+docker run -dit --name c1 --network ankit-network ubuntu
+docker run -dit --name c2 --network ankit-network ubuntu
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  

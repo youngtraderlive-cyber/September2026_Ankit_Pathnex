@@ -1,0 +1,195 @@
+- name: Install prometheus and monitoring
+  hosts: all
+  become: yes
+     tasks:
+        - name: Install prometheus dependencies
+            yum:
+              name:
+                - prometheus
+                - prometheus-node-exporter
+         state: present
+         
+        - name: Start prometheus service
+          service:
+              name: promotheus
+              state: started
+              enabled: yes
+
+resource  "aws_CloudWathc_log_group" "ankit-log-group {
+     name        =  "ankit-log-group" 
+}
+
+resource "aws_cloudwatch_log_steam" "ankit_log_steam" {
+     log_group_name  = aws_cloudwach_log_group.ankit_log_group.name
+     name            = "ankit-log-steam"
+}
+
+
+apiVersion: app/v1
+kind: deployment
+ metadata: 
+    name: fluented
+spec:
+  replicas: 1
+selector:
+    matchLabels:
+      app: fluentd
+template:
+  metadata:
+      labels:
+         app: fluentd
+spec:
+  containers:
+     - name: fluentd
+       image: fluentd/fluentd
+ports:
+  - containerPort: 24224
+
+---
+
+apiVersion: app/v1
+kind: service
+metadata:
+   name; fluentd
+spec:
+  selector
+    app: fluentd
+  ports:
+     - protocol: TCP
+       port: 24224
+
+
+jenkins integrating prometheus monitoring pipeline
+pipeline {
+   agent any
+      stages {
+         stage('Build') {
+             stpes {
+                 echo 'Building docker imae...'
+               }
+            }
+          stage('Test') {
+             steps {
+                echo 'Running tests....'
+             }
+          }
+         stage('Monitoring Deployment') {
+              stpes {
+                  kubectl apply -f kubernetes/deloyment.yaml
+                }
+            }
+        } 
+   }
+
+Gitlab prometheus and logging integration
+stages:
+    - build
+    - test
+    - deploy
+
+Build:
+  stage: build
+   script:
+      - docker build -t ankit-web-app
+Test:
+    stage: test                
+     script:
+        - docker login -u "$CI_REGISTORY_USER""  - p "$CI 
+deploy:
+    stage: deploy
+     script :
+          kubectl apply -f kubernets/deployment.yaml
+         
+
+from flask import flask
+app = flask(_name_)
+@app.route('/)
+def home()
+    return "Hello Ankit" 
+app.run(host='0.0.0.0,port=5000)
+
+
+FROM python: 3.11
+
+WORKDIR /opt/ankit/flask-app
+
+COPY. /otp/ankit/flask-app/
+
+RUN pip Install Flask
+
+CMD ["python", "/opt/ankit/flask-app/app.py"]
+
+
+
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
