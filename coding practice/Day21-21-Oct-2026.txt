@@ -1,0 +1,196 @@
+- name: Backup and Restore file
+  hosts: all
+  become: yes
+      taks:
+         - name: Create Backup of /etc directory 
+           command: tar -czcf/tmp/etc-backup.tar.rg /etc
+         - name: copy backup to restore server
+            copy:
+               src: /tmp/etc-backup.tar.gz
+               dest: /tmp/etc-backup.tar.gz
+         - name: Restore backup from remote server
+           command: tar -xzvf/tmp/etc-backup.tar.gz -c/
+
+
+resource "aws_s3_bucket" "ankit-bucket" {
+  bucket      =  "ankit-backup-bucket
+  region      =  "us-east-1"
+}
+
+
+versioning {
+     enabled = true
+}
+
+
+resource "aws_s3_bucket" "ankit_backup_bucket_eu" {
+  bucket     = "ankit_backup_bucket_eu" 
+  region     = "eu-west-1"
+}
+
+
+resource "aws_s3_bucket" "ankit_backup_file" {
+  bucket     = aws_s3_bucket.ankit_backup.bucket 
+  key        = "backup.tar.gz"
+  source     = "ankit-backup.tar.gz"
+}
+
+
+apiVersion: app/v1
+kind: statefulset
+metadata:
+    name: ankit-statefulset
+spec:
+    serviceName: "Ankit"
+    replicas: 3
+selector:
+   matchLabels:
+      app: ankit
+template:
+   metadata:
+      labels:
+         app: ankit
+spec:
+  container:
+      - name: nginx
+        image: nginx
+volumeMounts:
+   - mountPath: /user/share/nginx/html
+     name: web-content
+volumeclaintemplates:
+      - metadata:
+           name: web-content
+       spec:
+          accessModes: ["ReadWriteonce"]
+          resource:
+             requests:
+                 storage: 5gi
+
+
+jenkinsfile - Backup strategy for jenkins workspace
+ 
+pipeline {
+   agent any
+      stages {
+        stage('backup') {
+          steps {
+              echo 'Backing up jenkins workspace....'
+           }
+         }
+       
+         stage('Restore') {
+           steps {
+               echo 'Restoring jenkins workspace...'
+              }
+           }
+        }
+    }
+
+Gitlab backup and restore
+ 
+Stages:
+  - buckup
+  - restore
+
+Backup:
+    stage: backup
+     script:
+         - tar -czvf /tmp/backup.tar.gz kubernetes/deployment.yam
+Restore:
+    Stage: retore
+    script:
+       - tar -xzvf /tmp/backup.tag.gz -c kubernetes/
+
+
+Docker
+
+version: '3'
+service: 
+    web:
+       image: nginx
+       container_name: ankit-nginx
+       ports: 
+           - "80:80"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
