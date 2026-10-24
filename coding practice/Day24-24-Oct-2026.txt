@@ -1,0 +1,125 @@
+Ansible Deploy Docker container with helm
+
+- name: Deploy docker container with helm
+  hosts: localhost
+    tasks:
+       - name: Install helm
+         command: curl http://raw.githubusercontent.com/helm/helm/master/script/get-helm-3 | bash
+       - name: Deploy microservice with helm
+         command: helm install ankit-app./ microservice-chart
+
+
+module "ankit_vpc" {
+   source = "./vpc"
+}
+
+module "ankit_instance" {
+  source = "./instace"
+  vpc_id = module.ankit_vpc.vpc_is
+}
+
+
+kubernetes helm-based Auto-Scalling Deployment
+
+apiVersion: app/v1
+kind: deployment
+ metadata:
+    - name: ankit-web-app
+spec:
+   replicas: 3
+   
+selector:
+   matchLabels:
+      app: ankit-web-app
+temlate:
+  metadata:
+     labels:
+       app: ankit-web-app
+
+spec: 
+  container:
+     - name: nginx
+       image: nginx
+       ports:
+         - containerPort: 80
+
+---
+
+
+apiVersion: autoscaling/v2
+kind: Horizontalpodautoscaler
+metadata:
+    - name: ankit-web-app-hpa
+spec:
+   scaleTargetRef:
+      apiVersion: apps/v1
+      kind: deployment
+      name: ankit-web-app
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+jenkinsfile 
+pipeline {
+   agent any
+       stages {
+           stage('Scale up') {
+             steps {
+                echo 'Scaling up jenkins pipeline agent for heavy workloads...'
+             // Simulating scaling logic
+           }
+        }
+        stage('Build') {
+            steps {
+               echo 'Building project...'
+        }
+    }
+        stage('deply') {
+            steps {
+               echp 'deployment project...'
+              }
+            }
+      }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
