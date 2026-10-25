@@ -1,0 +1,221 @@
+- name: setup prometheus node exporter for monitoring
+  hosts: all
+  become: yes
+     tasks:
+         - name: Install prometheus node exporter
+             yum:
+                name: prometheus-node-exporter
+                state: present
+         - name: start prometheus node exporter service
+            service:
+                 name: prometheus node exporter
+                 state: started
+                 enabled: yes
+
+resource "aws_cloudwatch_matric_alarm" "ankit_cpu_alarm" {
+   alaram_name           = "ankit-cpu_utilization_high"
+   comparison_operator   = GreaterThenThreshold"
+   evaluation_period     = "1"
+   metric_name           = "CPUUtilization"
+   namespace             = "AWS/EC2"
+   period                = "60"
+   statistic             = "Average"
+   threshold             = "80"
+
+dimension = {
+   InstanceID  = aws_instance.ankit_ec2.id
+}
+
+alarm_action = [aws_sns_topic.ankit_alerts.arn]
+}
+
+resource "aws_sns_topic" "ankit_alerts" {
+   name = "ankit-alerts"
+}
+
+
+
+kubernetes - Set up prometheus and grafana
+
+apiVersion: app/v1
+kind: deployment
+metadata:
+    name:prometheus
+spec:
+   replicas: 1
+   selector:
+      matchLabels:
+          app: prometheus
+    template:
+      metadata: 
+        labels:
+           app: prometheus
+     spec:
+        container:
+           - name: prometheus
+             image: prom/prometheus:latest
+             ports:
+              -- containerPort: 9090
+
+---
+
+apiVersion: app/V1
+kind: deployment
+metadata:
+   name: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+       app: grafana
+    template:
+      metadata:
+        labels:
+           app: grafana
+   spec:
+     container:
+       - name: grafana
+         image: grafana/grafana:latest
+         ports: 
+            containerPort: 3000
+
+
+jenkins continuous Monitoring and Alerts ain CI pipeline
+pipeline {
+  agent any
+      stages {
+         stage('Moitor') {
+            steps {
+               script {
+                   echo 'Trigger CloudWatch alarm if CPU exceed 80%
+               }
+            }
+         }
+        stage('Test') {
+           steps {
+             echo 'Running tests....'
+            }
+         }
+      }
+   }
+
+
+
+
+Gitlab Cl/CD - Monitoring and alerting 
+Stages:
+  - monitor
+  - test
+
+Monitor:
+    stages: monitor
+    script:
+      - aws cloudwatch put-metric-data --namespace "AWS/EC2" --metric-name "CPUUtilization" --value 90
+Test:
+    stages: test
+    script:
+     - echo "Running tests...'
+
+
+Docker
+node_modules
+.git
+temp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
