@@ -1,0 +1,74 @@
+- name: Setup VPC peering between accounts
+  hosts: localhost
+   tasks: 
+     - name: Create VPC peering connection 
+        command: aws ec2 create-vpc-peering-connection...
+
+resource "aws_vpc_peering_connection" "ankit-peering" {
+   vpc_id          = aws_vpc.ankit-vpc.id
+   peer_vpc_id     = aws_vpc.peer_vpc.id
+}
+
+resource "aws_route" "ankit_route" {
+    route_table_id             = aws_route_table.ankit_rt.id
+    destination_cidr_block     = "10.0.0.0/16"
+    vpc_peering_connection_id  = aws_vpc_peering_connection.ankit_peering.id
+}
+
+kubernetes 
+apiVersion: app/V1
+kind: NetworkPolicy
+
+metadata:
+   name: ankit-vpc-policy
+
+spec:
+  podSelector:
+    matchLabels:
+     app: ankit-app
+
+  ingress:
+      - from:
+         - podSelector:
+             matchLabels:
+                app: ankit-db
+
+
+
+Docker
+
+docker save -o ankit-nginx.tar ankit-nginx
+
+docker load -i ankit-nginx.tar
+
+bash
+
+docker run --rm -v ankit-volume:/data -v$(pwd):/backup ubuntu tar czf /backup ankit-backup.tar.gz /data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
